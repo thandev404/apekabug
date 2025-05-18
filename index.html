@@ -1,28 +1,197 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Curse Xylays Actions</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="terminal">
-    <div class="header">
-      <span class="dot red"></span>
-      <span class="dot yellow"></span>
-      <span class="dot green"></span>
-      <span class="title">~ xylays@cursehack</span>
-    </div>
-    <div class="body">
-      <p class="prompt">Hi all, if you ask who ryy call me <span class="highlight">xylays</span> or <span class="highlight">conquer</span>.</p>
-      <p class="prompt">cave coding style is relaxed for sure.</p>
-      <p class="prompt">cave vision to help the system, develop programming etc.</p>
-      <p class="prompt">if you need codee services or something pv tele cave:</p>
-      <p class="prompt"><a href="https://t.me/conquerryy" target="_blank" class="tele">@conquerryy</a></p>
-      <br>
-      <p class="prompt">~ powered by dark terminal mode</p>
-    </div>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Tebak Tebakkan Konyol - Java Game
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Baloo 2', cursive;
+    }
+  </style>
+ </head>
+ <body class="bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 min-h-screen flex flex-col items-center justify-center px-4">
+  <!-- Splash Screen -->
+  <div class="flex flex-col items-center justify-center min-h-screen w-full" id="splash-screen">
+   <img alt="Logo aplikasi Tebak Tebakkan Konyol, gambar kartun lucu dengan warna kuning cerah dan tulisan tebak tebakkan konyol" class="w-36 h-36 mb-8" height="150" src="https://storage.googleapis.com/a1aa/image/c240255c-f8a9-44b8-292a-725a29c4b743.jpg" width="150"/>
+   <h1 class="text-4xl font-extrabold text-yellow-900 mb-4 drop-shadow-lg">
+    Tebak Tebakkan Konyol
+   </h1>
+   <p class="text-yellow-900 text-lg mb-12 drop-shadow-md">
+    Game tebak-tebakan lucu dan konyol dari Java!
+   </p>
+   <button class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300" id="start-btn">
+    Mulai Game
+   </button>
   </div>
-</body>
-          </html>
+  <!-- Game Screen -->
+  <div class="hidden flex flex-col items-center justify-center min-h-screen w-full max-w-xl mx-auto bg-yellow-50 rounded-xl p-6 shadow-xl" id="game-screen">
+   <img alt="Logo kecil Tebak Tebakkan Konyol, ikon lucu dengan warna kuning dan oranye" class="w-24 h-24 mb-6" height="100" src="https://storage.googleapis.com/a1aa/image/49f580e0-643e-4bd1-4452-08e7cc819d8e.jpg" width="100"/>
+   <h2 class="text-3xl font-bold text-yellow-900 mb-6">
+    Tebak Tebakkan Konyol
+   </h2>
+   <div class="mb-6 text-center px-4" id="question-container">
+    <p class="text-xl text-yellow-800 font-semibold" id="question">
+    </p>
+   </div>
+   <input autocomplete="off" class="w-full p-3 rounded border-2 border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4 text-yellow-900 font-semibold" id="answer-input" placeholder="Masukkan jawabanmu..." type="text"/>
+   <button class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="submit-btn">
+    Jawab
+   </button>
+   <p class="text-yellow-900 font-semibold min-h-[2rem]" id="feedback">
+   </p>
+   <p class="mt-6 text-yellow-700 font-semibold">
+    Skor:
+    <span id="score">
+     0
+    </span>
+   </p>
+  </div>
+  <script>
+   const splashScreen = document.getElementById('splash-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const startBtn = document.getElementById('start-btn');
+    const questionEl = document.getElementById('question');
+    const answerInput = document.getElementById('answer-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const feedbackEl = document.getElementById('feedback');
+    const scoreEl = document.getElementById('score');
+
+    // Array of silly riddles and their answers
+    const riddles = [
+      {
+        question: "Apa yang selalu datang tapi tidak pernah tiba?",
+        answer: "besok",
+      },
+      {
+        question: "Kenapa burung tidak pernah masuk sekolah?",
+        answer: "karena mereka sudah punya sayap",
+      },
+      {
+        question: "Apa yang bisa terbang tapi tidak punya sayap?",
+        answer: "waktu",
+      },
+      {
+        question: "Kenapa ikan tidak pernah ke gym?",
+        answer: "karena mereka sudah punya otot air",
+      },
+      {
+        question: "Apa yang punya gigi tapi tidak bisa menggigit?",
+        answer: "sisir",
+      },
+      {
+        question: "Kenapa komputer suka makan snack?",
+        answer: "karena suka byte",
+      },
+      {
+        question: "Apa yang bisa kamu pegang tapi tidak bisa kamu lihat?",
+        answer: "napas",
+      },
+      {
+        question: "Kenapa jam dinding tidak pernah terlambat?",
+        answer: "karena dia selalu tepat waktu",
+      },
+      {
+        question: "Apa yang punya tangan tapi tidak bisa bertepuk tangan?",
+        answer: "jam",
+      },
+      {
+        question: "Kenapa pohon tidak pernah sakit?",
+        answer: "karena mereka punya akar yang kuat",
+      },
+      {
+        question: "Apa yang selalu basah saat mengeringkan?",
+        answer: "handuk",
+      },
+      {
+        question: "Kenapa sepeda tidak bisa berdiri sendiri?",
+        answer: "karena dia dua roda",
+      },
+      {
+        question: "Apa yang punya kepala tapi tidak punya otak?",
+        answer: "bantal",
+      },
+      {
+        question: "Kenapa kucing suka duduk di atas keyboard?",
+        answer: "karena mereka suka mengetik pesan rahasia",
+      },
+      {
+        question: "Apa yang bisa kamu tangkap tapi tidak bisa kamu lempar?",
+        answer: "flu",
+      },
+    ];
+
+    let currentRiddleIndex = 0;
+    let score = 0;
+
+    function showRiddle(index) {
+      questionEl.textContent = riddles[index].question;
+      answerInput.value = '';
+      feedbackEl.textContent = '';
+      answerInput.focus();
+    }
+
+    function checkAnswer() {
+      const userAnswer = answerInput.value.trim().toLowerCase();
+      const correctAnswer = riddles[currentRiddleIndex].answer.toLowerCase();
+
+      if (userAnswer === '') {
+        feedbackEl.textContent = 'Tolong masukkan jawaban!';
+        feedbackEl.classList.remove('text-green-700');
+        feedbackEl.classList.add('text-red-700');
+        return;
+      }
+
+      if (userAnswer === correctAnswer) {
+        feedbackEl.textContent = 'Jawaban benar! 🎉';
+        feedbackEl.classList.remove('text-red-700');
+        feedbackEl.classList.add('text-green-700');
+        score++;
+        scoreEl.textContent = score;
+      } else {
+        feedbackEl.textContent = `Salah! Jawaban yang benar: "${riddles[currentRiddleIndex].answer}"`;
+        feedbackEl.classList.remove('text-green-700');
+        feedbackEl.classList.add('text-red-700');
+      }
+
+      currentRiddleIndex++;
+      if (currentRiddleIndex < riddles.length) {
+        setTimeout(() => {
+          showRiddle(currentRiddleIndex);
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          alert(`Game selesai! Skor kamu: ${score} dari ${riddles.length}`);
+          resetGame();
+        }, 2000);
+      }
+    }
+
+    function resetGame() {
+      currentRiddleIndex = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      showRiddle(currentRiddleIndex);
+    }
+
+    startBtn.addEventListener('click', () => {
+      splashScreen.classList.add('hidden');
+      gameScreen.classList.remove('hidden');
+      resetGame();
+    });
+
+    submitBtn.addEventListener('click', checkAnswer);
+
+    answerInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+  </script>
+ </body>
+</html>
