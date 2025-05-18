@@ -23,11 +23,24 @@
     Tebak Tebakkan Konyol
    </h1>
    <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
-    Game tebak-tebakan lucu dan konyol dari Java! || Author: isReyy
+    Game tebak-tebakan lucu dan konyol dari Java!
    </p>
-   <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300" id="start-btn">
-    Mulai Game!
-   </button>
+   <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
+    Author: isReyy
+   </p>
+   <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
+    Versi: 1.5 New Update
+   </p>
+   <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="start-btn1">
+  Stage Cemen
+</button>
+<button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="start-btn">
+  Stage Medium
+</button>
+<button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300" id="start-btn2">
+  Stage Dewa!
+</button>
+
   </div>
   <!-- Game Screen -->
   <div class="hidden flex flex-col items-center justify-center min-h-screen w-full max-w-xl mx-auto bg-cyan-50 rounded-xl p-6 shadow-xl" id="game-screen">
@@ -42,7 +55,35 @@
    <input autocomplete="off" class="w-full p-3 rounded border-2 border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4 text-cyan-900 font-semibold" id="answer-input" placeholder="Masukkan jawabanmu..." type="text"/>
    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="submit-btn">
     Jawab
-   </button>
+    <div class="controls">
+    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle" aria-label="Toggle music">▶ Play Cincin</button>
+    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle2" aria-label="Toggle music2">▶ Play Mata Air</button>
+    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle3" aria-label="Toggle music3">▶ Play Evaluasi</button>
+  </div>
+
+  <div id="nowPlayingCard" style="display: none;">
+<div class="casset spin"></div>
+    <div class="song-info">
+      <img id="songImage" src="https://ar-hosting.pages.dev/1746706133549.jpg" alt="Song Image">
+      <div>
+        <h3 id="songTitle">Cincin</h3>
+        <p id="songArtist">Hindia</p>
+      </div>
+    </div>
+  </div>
+
+<audio id="backgroundMusic" loop>
+  <source src="https://ar-hosting.pages.dev/1746704494177.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="backgroundMusic2" loop>
+  <source src="https://ar-hosting.pages.dev/1746767230846.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="backgroundMusic3" loop>
+  <source src="https://ar-hosting.pages.dev/1746767220966.mp3" type="audio/mpeg">
+</audio>
+
    <p class="text-cyan-900 font-semibold min-h-[2rem]" id="feedback">
    </p>
    <p class="mt-6 text-cyan-700 font-semibold">
@@ -52,132 +93,311 @@
     </span>
    </p>
   </div>
-  <script>
-   const splashScreen = document.getElementById('splash-screen');
-    const gameScreen = document.getElementById('game-screen');
-    const startBtn = document.getElementById('start-btn');
-    const questionEl = document.getElementById('question');
-    const answerInput = document.getElementById('answer-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const feedbackEl = document.getElementById('feedback');
-    const scoreEl = document.getElementById('score');
+  <script>const splashScreen = document.getElementById('splash-screen');
+const gameScreen = document.getElementById('game-screen');
+const startBtn = document.getElementById('start-btn');
+const startBtn1 = document.getElementById('start-btn1');
+const startBtn2 = document.getElementById('start-btn2');
+const questionEl = document.getElementById('question');
+const answerInput = document.getElementById('answer-input');
+const submitBtn = document.getElementById('submit-btn');
+const feedbackEl = document.getElementById('feedback');
+const scoreEl = document.getElementById('score');
+// Array of riddles for each stage
+const riddlesCemen = [
+  {
+    question: "Apa yang selalu datang tapi tidak pernah tiba?",
+    answer: "besok",
+  },
+  {
+    question: "Kenapa burung tidak pernah masuk sekolah?",
+    answer: "karena mereka sudah punya sayap",
+  },
+  {
+    question: "Apa yang bisa terbang tapi tidak punya sayap?",
+    answer: "waktu",
+  },
+  {
+    question: "Kenapa ikan tidak pernah ke gym?",
+    answer: "karena mereka sudah punya otot air",
+  },
+  {
+    question: "Apa yang punya gigi tapi tidak bisa menggigit?",
+    answer: "sisir",
+  },
+  {
+    question: "Kenapa komputer suka makan snack?",
+    answer: "karena suka byte",
+  },
+  {
+    question: "Apa yang bisa kamu pegang tapi tidak bisa kamu lihat?",
+    answer: "napas",
+  },
+  {
+    question: "Kenapa jam dinding tidak pernah terlambat?",
+    answer: "karena dia selalu tepat waktu",
+  },
+  {
+    question: "Apa yang punya tangan tapi tidak bisa bertepuk tangan?",
+    answer: "jam",
+  },
+  {
+    question: "Kenapa pohon tidak pernah sakit?",
+    answer: "karena mereka punya akar yang kuat",
+  },
+];
 
-    // Array of silly riddles and their answers
-    const riddles = [
-      {
-        question: "Apa yang selalu datang tapi tidak pernah tiba?",
-        answer: "besok",
-      },
-      {
-        question: "Kenapa burung tidak pernah masuk sekolah?",
-        answer: "karena mereka sudah punya sayap",
-      },
-      {
-        question: "Apa yang bisa terbang tapi tidak punya sayap?",
-        answer: "waktu",
-      },
-      {
-        question: "Kenapa ikan tidak pernah ke gym?",
-        answer: "karena mereka sudah punya otot air",
-      },
-      {
-        question: "Apa yang punya gigi tapi tidak bisa menggigit?",
-        answer: "sisir",
-      },
-      {
-        question: "Kenapa komputer suka makan snack?",
-        answer: "karena suka byte",
-      },
-      {
-        question: "Apa yang bisa kamu pegang tapi tidak bisa kamu lihat?",
-        answer: "napas",
-      },
-      {
-        question: "Kenapa jam dinding tidak pernah terlambat?",
-        answer: "karena dia selalu tepat waktu",
-      },
-      {
-        question: "Apa yang punya tangan tapi tidak bisa bertepuk tangan?",
-        answer: "jam",
-      },
-      {
-        question: "Kenapa pohon tidak pernah sakit?",
-        answer: "karena mereka punya akar yang kuat",
-      },
-      {
-        question: "Apa yang selalu basah saat mengeringkan?",
-        answer: "handuk",
-      },
-      {
-        question: "Kenapa sepeda tidak bisa berdiri sendiri?",
-        answer: "karena dia dua roda",
-      },
-      {
-        question: "Apa yang punya kepala tapi tidak punya otak?",
-        answer: "bantal",
-      },
-      {
-        question: "Kenapa kucing suka duduk di atas keyboard?",
-        answer: "karena mereka suka mengetik pesan rahasia",
-      },
-      {
-        question: "Apa yang bisa kamu tangkap tapi tidak bisa kamu lempar?",
-        answer: "flu",
-      },
-    ];
+const riddlesMedium = [
+  {
+    question: "Apa yang selalu basah saat mengeringkan?",
+    answer: "handuk",
+  },
+  {
+    question: "Kenapa sepeda tidak bisa berdiri sendiri?",
+    answer: "karena dia dua roda",
+  },
+  {
+    question: "Apa yang punya kepala tapi tidak punya otak?",
+    answer: "bantal",
+  },
+  {
+    question: "Kenapa kucing suka duduk di atas keyboard?",
+    answer: "karena mereka suka mengetik pesan rahasia",
+  },
+  {
+    question: "Apa yang bisa kamu tangkap tapi tidak bisa kamu lempar?",
+    answer: "flu",
+  },
+  {
+    question: "Apa yang bisa kamu lihat tapi tidak bisa kamu sentuh?",
+    answer: "bayangan",
+  },
+  {
+    question: "Kenapa matahari tidak pernah tidur?",
+    answer: "karena dia selalu bersinar",
+  },
+  {
+    question: "Apa yang bisa terbang tanpa sayap?",
+    answer: "waktu",
+  },
+  {
+    question: "Kenapa kucing tidak suka air?",
+    answer: "karena mereka lebih suka kering",
+  },
+  {
+    question: "Apa yang bisa kamu pecahkan tapi tidak bisa kamu lihat?",
+    answer: "janji",
+  },
+];
 
-    let currentRiddleIndex = 0;
-    let score = 0;
+const riddlesDewa = [
+  {
+    question: "Apa yang selalu bergerak maju tetapi tidak pernah mundur?",
+    answer: "waktu",
+  },
+  {
+    question: "Kenapa ular tidak pernah bersekolah?",
+    answer: "karena mereka sudah punya sisik",
+  },
+  {
+    question: "Apa yang bisa kamu temukan di ujung pelangi?",
+    answer: "pot emas",
+  },
+  {
+    question: "Kenapa gajah tidak pernah menggunakan komputer?",
+    answer: "karena mereka takut mouse",
+  },
+  {
+    question: "Apa yang bisa kamu dengar tetapi tidak bisa kamu lihat?",
+    answer: "suara",
+  },
+  {
+    question: "Kenapa kuda tidak bisa terbang?",
+    answer: "karena mereka tidak punya sayap",
+  },
+  {
+    question: "Apa yang bisa kamu bawa ke mana saja tetapi tidak bisa kamu lihat?",
+    answer: "pikiran",
+  },
+  {
+    question: "Kenapa burung tidak pernah menggunakan ponsel?",
+    answer: "karena mereka sudah punya sayap",
+  },
+  {
+    question: "Apa yang bisa kamu temukan di dalam air tetapi tidak bisa kamu sentuh?",
+    answer: "ikan",
+  },
+  {
+    question: "Kenapa pohon tidak pernah berbohong?",
+    answer: "karena mereka selalu jujur",
+  },
+];
 
-    function showRiddle(index) {
-      questionEl.textContent = riddles[index].question;
-      answerInput.value = '';
-      feedbackEl.textContent = '';
-      answerInput.focus();
-    }
+let currentRiddleIndex = 0;
+let score = 0;
+let currentRiddles = [];
 
-    function checkAnswer() {
-      const userAnswer = answerInput.value.trim().toLowerCase();
-      const correctAnswer = riddles[currentRiddleIndex].answer.toLowerCase();
+// Function to show the riddle based on the selected stage
+function showRiddle(index) {
+  questionEl.textContent = currentRiddles[index].question;
+  answerInput.value = '';
+  feedbackEl.textContent = '';
+  answerInput.focus();
+}
 
-      if (userAnswer === '') {
-        feedbackEl.textContent = 'Tolong masukkan jawaban!';
-        feedbackEl.classList.remove('text-green-700');
-        feedbackEl.classList.add('text-red-700');
-        return;
-      }
+function checkAnswer() {
+  const userAnswer = answerInput.value.trim().toLowerCase();
+  const correctAnswer = currentRiddles[currentRiddleIndex].answer.toLowerCase();
 
-      if (userAnswer === correctAnswer) {
-        feedbackEl.textContent = 'Jawaban benar! 🎉';
-        feedbackEl.classList.remove('text-red-700');
-        feedbackEl.classList.add('text-green-700');
-        score++;
-        scoreEl.textContent = score;
-      } else {
-        feedbackEl.textContent = `Salah! Jawaban yang benar: "${riddles[currentRiddleIndex].answer}"`;
-        feedbackEl.classList.remove('text-green-700');
-        feedbackEl.classList.add('text-red-700');
-      }
+  if (userAnswer === '') {
+    feedbackEl.textContent = 'Tolong masukkan jawaban!';
+    feedbackEl.classList.remove('text-green-700');
+    feedbackEl.classList.add('text-red-700');
+    return;
+  }
 
-      currentRiddleIndex++;
-      if (currentRiddleIndex < riddles.length) {
-        setTimeout(() => {
-          showRiddle(currentRiddleIndex);
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          alert(`Game selesai! Skor kamu: ${score} dari ${riddles.length}`);
-          resetGame();
-        }, 2000);
-      }
-    }
+  if (userAnswer === correctAnswer) {
+    feedbackEl.textContent = 'Jawaban benar! 🎉';
+    feedbackEl.classList.remove('text-red-700');
+    feedbackEl.classList.add('text-green-700');
+    score++;
+    scoreEl.textContent = score;
+  } else {
+    feedbackEl.textContent = `Salah! Jawaban yang benar: "${currentRiddles[currentRiddleIndex].answer}"`;
+    feedbackEl.classList.remove('text-green-700');
+    feedbackEl.classList.add('text-red-700');
+  }
 
-    function resetGame() {
-      currentRiddleIndex = 0;
-      score = 0;
-      scoreEl.textContent = score;
+  currentRiddleIndex++;
+  if (currentRiddleIndex < currentRiddles.length) {
+    setTimeout(() => {
       showRiddle(currentRiddleIndex);
-    }
+    }, 2000);
+  } else {
+    setTimeout(() => {
+      alert(`Game selesai! Skor kamu: ${score} dari ${currentRiddles.length}`);
+      resetGame();
+    }, 2000);
+  }
+}
+
+function resetGame() {
+  currentRiddleIndex = 0;
+  score = 0;
+  scoreEl.textContent = score;
+  showRiddle(currentRiddleIndex);
+}
+
+// Event listeners for stage buttons
+startBtn1.addEventListener('click', () => {
+  splashScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  currentRiddles = riddlesCemen; // Set riddles for Stage Cemen
+  resetGame();
+});
+
+startBtn.addEventListener('click', () => {
+  splashScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  currentRiddles = riddlesMedium; // Set riddles for Stage Medium
+  resetGame();
+});
+
+startBtn2.addEventListener('click', () => {
+  splashScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  currentRiddles = riddlesDewa; // Set riddles for Stage Dewa
+  resetGame();
+});
+
+submitBtn.addEventListener('click', checkAnswer);
+
+answerInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    checkAnswer();
+  }
+});
+
+const musicBtn1 = document.getElementById('mussicToggle');
+const musicBtn2 = document.getElementById('mussicToggle2');
+const musicBtn3 = document.getElementById('mussicToggle3');
+
+const music1 = document.getElementById('backgroundMusic');
+const music2 = document.getElementById('backgroundMusic2');
+const music3 = document.getElementById('backgroundMusic3');
+
+const nowPlayingCard = document.getElementById('nowPlayingCard');
+const songTitle = document.getElementById('songTitle');
+const songArtist = document.getElementById('songArtist');
+const songImage = document.getElementById('songImage');
+
+function updateNowPlaying(title, artist, image) {
+  songTitle.textContent = title;
+  songArtist.textContent = artist;
+  songImage.src = image;
+  nowPlayingCard.style.display = 'flex';
+
+  // Restart rotate animation
+  songImage.classList.remove('rotating');
+  void songImage.offsetWidth;  // trigger reflow
+  songImage.classList.add('rotating');
+}
+
+// Stop all music and stop image rotation
+function stopAllMusic() {
+  music1.pause();
+  music2.pause();
+  music3.pause();
+  musicBtn1.textContent = '▶ Play Cincin';
+  musicBtn2.textContent = '▶ Play Mata Air';
+  musicBtn3.textContent = '▶ Play Evaluasi';
+
+  // Stop rotating image
+  songImage.classList.remove('rotating');
+}
+
+// Music control
+musicBtn1.addEventListener('click', () => {
+  if (music1.paused) {
+    stopAllMusic();
+    music1.play();
+    musicBtn1.textContent = '⏸';
+    updateNowPlaying('Cincin', 'Hindia', 'https://ar-hosting.pages.dev/1746706133549.jpg');
+  } else {
+    music1.pause();
+    musicBtn1.textContent = '▶ Play Cincin';
+    nowPlayingCard.style.display = 'none';
+    songImage.classList.remove('rotating');
+  }
+});
+
+musicBtn2.addEventListener('click', () => {
+  if (music2.paused) {
+    stopAllMusic();
+    music2.play();
+    musicBtn2.textContent = '⏸';
+    updateNowPlaying('Mata Air', 'Hindia', 'https://ar-hosting.pages.dev/1746706133549.jpg');
+  } else {
+    music2.pause();
+    musicBtn2.textContent = '▶ Play Mata Air';
+    nowPlayingCard.style.display = 'none';
+    songImage.classList.remove('rotating');
+  }
+});
+
+musicBtn3.addEventListener('click', () => {
+  if (music3.paused) {
+    stopAllMusic();
+    music3.play();
+    musicBtn3.textContent = '⏸';
+    updateNowPlaying('Evaluasi', 'Hindia', 'https://ar-hosting.pages.dev/1746706133549.jpg');
+  } else {
+    music3.pause();
+    musicBtn3.textContent = '▶ Play Evaluasi';
+    nowPlayingCard.style.display = 'none';
+    songImage.classList.remove('rotating');
+  }
+});
 
     startBtn.addEventListener('click', () => {
       splashScreen.classList.add('hidden');
@@ -194,4 +414,5 @@
     });
   </script>
  </body>
-</html>
+ </html>
+ 
