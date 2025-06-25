@@ -1,415 +1,135 @@
-<html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-   Tebak Tebakkan Konyol - Java Game
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&amp;display=swap" rel="stylesheet"/>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kirim Pesan WhatsApp</title>
   <style>
-   body {
-      font-family: 'Baloo 2', cursive;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .container {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    h1 {
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      color: #38bdf8;
+      text-shadow: 0 0 6px #0284c7;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      resize: vertical;
+      font-family: inherit;
+    }
+    textarea {
+      min-height: 100px;
+    }
+    button {
+      width: 100%;
+      background: #0284c7;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.25s ease-in-out;
+      box-shadow: 0 0 10px #0284c7;
+    }
+    button:hover {
+      background: #0369a1;
+      box-shadow: 0 0 15px #0369a1;
+    }
+    .status {
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: center;
+      min-height: 1.2rem;
+      user-select: none;
     }
   </style>
- </head>
- <body class="bg-gradient-to-br from-cyan-300 via-cyan-400 to-cyan-500 min-h-screen flex flex-col items-center justify-center px-4">
-  <!-- Splash Screen -->
-  <div class="flex flex-col items-center justify-center min-h-screen w-full" id="splash-screen">
-   <img alt="Logo aplikasi Tebak Tebakkan Konyol, gambar kartun lucu dengan warna kuning cerah dan tulisan tebak tebakkan konyol" class="w-36 h-36 mb-8" height="150" src="https://ar-hosting.pages.dev/1747557647705.jpg" width="150"/>
-   <h1 class="text-4xl font-extrabold text-cyan-900 mb-4 drop-shadow-lg">
-    Tebak Tebakkan Konyol
-   </h1>
-   <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
-    Game tebak-tebakan lucu dan konyol dari Java!
-   </p>
-   <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
-    Author: isReyy
-   </p>
-   <p class="text-cyan-900 text-lg mb-12 drop-shadow-md">
-    Versi: 1.5 New Update
-   </p>
-   <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="start-btn1">
-  Stage Cemen
-</button>
-<button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="start-btn">
-  Stage Medium
-</button>
-<button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300" id="start-btn2">
-  Stage Dewa!
-</button>
+</head>
+<body>
 
-  </div>
-  <!-- Game Screen -->
-  <div class="hidden flex flex-col items-center justify-center min-h-screen w-full max-w-xl mx-auto bg-cyan-50 rounded-xl p-6 shadow-xl" id="game-screen">
-   <img alt="Logo kecil Tebak Tebakkan Konyol, ikon lucu dengan warna kuning dan oranye" class="w-24 h-24 mb-6" height="100" src="https://ar-hosting.pages.dev/1747557647705.jpg" width="100"/>
-   <h2 class="text-3xl font-bold text-cyan-900 mb-6">
-    Tebak Tebakkan Konyol ©® isReyy
-   </h2>
-   <div class="mb-6 text-center px-4" id="question-container">
-    <p class="text-xl text-cyan-800 font-semibold" id="question">
-    </p>
-   </div>
-   <input autocomplete="off" class="w-full p-3 rounded border-2 border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 mb-4 text-cyan-900 font-semibold" id="answer-input" placeholder="Masukkan jawabanmu..." type="text"/>
-   <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="submit-btn">
-    Jawab
-    <div class="controls">
-    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle" aria-label="Toggle music">▶ Play Cincin</button>
-    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle2" aria-label="Toggle music2">▶ Play Mata Air</button>
-    <button class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 mb-4" id="mussicToggle3" aria-label="Toggle music3">▶ Play Evaluasi</button>
+  <div class="container">
+    <h1>Kirim Pesan WhatsApp</h1>
+
+    <label for="number">Nomor WhatsApp (contoh: 6281234567890)</label>
+    <input type="text" id="number" placeholder="Masukkan nomor tujuan tanpa + atau spasi" />
+
+    <label for="message">Pesan</label>
+    <textarea id="message" placeholder="Tulis pesanmu di sini..."></textarea>
+
+    <button onclick="sendMessage()">Kirim Pesan</button>
+
+    <div class="status" id="status"></div>
   </div>
 
-  <div id="nowPlayingCard" style="display: none;">
-<div class="casset spin"></div>
-    <div class="song-info">
-      <img id="songImage" src="https://ar-hosting.pages.dev/1746706133549.jpg" alt="Song Image">
-      <div>
-        <h3 id="songTitle">Cincin</h3>
-        <p id="songArtist">Hindia</p>
-      </div>
-    </div>
-  </div>
+  <script>
+    async function sendMessage() {
+      const number = document.getElementById('number').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const status = document.getElementById('status');
 
-<audio id="backgroundMusic" loop>
-  <source src="https://ar-hosting.pages.dev/1746704494177.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="backgroundMusic2" loop>
-  <source src="https://ar-hosting.pages.dev/1746767230846.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="backgroundMusic3" loop>
-  <source src="https://ar-hosting.pages.dev/1746767220966.mp3" type="audio/mpeg">
-</audio>
-
-   <p class="text-cyan-900 font-semibold min-h-[2rem]" id="feedback">
-   </p>
-   <p class="mt-6 text-cyan-700 font-semibold">
-    Skor:
-    <span id="score">
-     0
-    </span>
-   </p>
-  </div>
-  <script>const splashScreen = document.getElementById('splash-screen');
-const gameScreen = document.getElementById('game-screen');
-const startBtn = document.getElementById('start-btn');
-const startBtn1 = document.getElementById('start-btn1');
-const startBtn2 = document.getElementById('start-btn2');
-const questionEl = document.getElementById('question');
-const answerInput = document.getElementById('answer-input');
-const submitBtn = document.getElementById('submit-btn');
-const feedbackEl = document.getElementById('feedback');
-const scoreEl = document.getElementById('score');
-// Array of riddles for each stage
-const riddlesCemen = [
-  {
-    question: "Apa yang selalu datang tapi tidak pernah tiba?",
-    answer: "besok",
-  },
-  {
-    question: "Kenapa burung tidak pernah masuk sekolah?",
-    answer: "karena mereka sudah punya sayap",
-  },
-  {
-    question: "Apa yang bisa terbang tapi tidak punya sayap?",
-    answer: "waktu",
-  },
-  {
-    question: "Kenapa ikan tidak pernah ke gym?",
-    answer: "karena mereka sudah punya otot air",
-  },
-  {
-    question: "Apa yang punya gigi tapi tidak bisa menggigit?",
-    answer: "sisir",
-  },
-  {
-    question: "Kenapa komputer suka makan snack?",
-    answer: "karena suka byte",
-  },
-  {
-    question: "Apa yang bisa kamu pegang tapi tidak bisa kamu lihat?",
-    answer: "napas",
-  },
-  {
-    question: "Kenapa jam dinding tidak pernah terlambat?",
-    answer: "karena dia selalu tepat waktu",
-  },
-  {
-    question: "Apa yang punya tangan tapi tidak bisa bertepuk tangan?",
-    answer: "jam",
-  },
-  {
-    question: "Kenapa pohon tidak pernah sakit?",
-    answer: "karena mereka punya akar yang kuat",
-  },
-];
-
-const riddlesMedium = [
-  {
-    question: "Apa yang selalu basah saat mengeringkan?",
-    answer: "handuk",
-  },
-  {
-    question: "Kenapa sepeda tidak bisa berdiri sendiri?",
-    answer: "karena dia dua roda",
-  },
-  {
-    question: "Apa yang punya kepala tapi tidak punya otak?",
-    answer: "bantal",
-  },
-  {
-    question: "Kenapa kucing suka duduk di atas keyboard?",
-    answer: "karena mereka suka mengetik pesan rahasia",
-  },
-  {
-    question: "Apa yang bisa kamu tangkap tapi tidak bisa kamu lempar?",
-    answer: "flu",
-  },
-  {
-    question: "Apa yang bisa kamu lihat tapi tidak bisa kamu sentuh?",
-    answer: "bayangan",
-  },
-  {
-    question: "Kenapa matahari tidak pernah tidur?",
-    answer: "karena dia selalu bersinar",
-  },
-  {
-    question: "Apa yang bisa terbang tanpa sayap?",
-    answer: "waktu",
-  },
-  {
-    question: "Kenapa kucing tidak suka air?",
-    answer: "karena mereka lebih suka kering",
-  },
-  {
-    question: "Apa yang bisa kamu pecahkan tapi tidak bisa kamu lihat?",
-    answer: "janji",
-  },
-];
-
-const riddlesDewa = [
-  {
-    question: "Apa yang selalu bergerak maju tetapi tidak pernah mundur?",
-    answer: "waktu",
-  },
-  {
-    question: "Kenapa ular tidak pernah bersekolah?",
-    answer: "karena mereka sudah punya sisik",
-  },
-  {
-    question: "Apa yang bisa kamu temukan di ujung pelangi?",
-    answer: "pot emas",
-  },
-  {
-    question: "Kenapa gajah tidak pernah menggunakan komputer?",
-    answer: "karena mereka takut mouse",
-  },
-  {
-    question: "Apa yang bisa kamu dengar tetapi tidak bisa kamu lihat?",
-    answer: "suara",
-  },
-  {
-    question: "Kenapa kuda tidak bisa terbang?",
-    answer: "karena mereka tidak punya sayap",
-  },
-  {
-    question: "Apa yang bisa kamu bawa ke mana saja tetapi tidak bisa kamu lihat?",
-    answer: "pikiran",
-  },
-  {
-    question: "Kenapa burung tidak pernah menggunakan ponsel?",
-    answer: "karena mereka sudah punya sayap",
-  },
-  {
-    question: "Apa yang bisa kamu temukan di dalam air tetapi tidak bisa kamu sentuh?",
-    answer: "ikan",
-  },
-  {
-    question: "Kenapa pohon tidak pernah berbohong?",
-    answer: "karena mereka selalu jujur",
-  },
-];
-
-let currentRiddleIndex = 0;
-let score = 0;
-let currentRiddles = [];
-
-// Function to show the riddle based on the selected stage
-function showRiddle(index) {
-  questionEl.textContent = currentRiddles[index].question;
-  answerInput.value = '';
-  feedbackEl.textContent = '';
-  answerInput.focus();
-}
-
-function checkAnswer() {
-  const userAnswer = answerInput.value.trim().toLowerCase();
-  const correctAnswer = currentRiddles[currentRiddleIndex].answer.toLowerCase();
-
-  if (userAnswer === '') {
-    feedbackEl.textContent = 'Tolong masukkan jawaban!';
-    feedbackEl.classList.remove('text-green-700');
-    feedbackEl.classList.add('text-red-700');
-    return;
-  }
-
-  if (userAnswer === correctAnswer) {
-    feedbackEl.textContent = 'Jawaban benar! 🎉';
-    feedbackEl.classList.remove('text-red-700');
-    feedbackEl.classList.add('text-green-700');
-    score++;
-    scoreEl.textContent = score;
-  } else {
-    feedbackEl.textContent = `Salah! Jawaban yang benar: "${currentRiddles[currentRiddleIndex].answer}"`;
-    feedbackEl.classList.remove('text-green-700');
-    feedbackEl.classList.add('text-red-700');
-  }
-
-  currentRiddleIndex++;
-  if (currentRiddleIndex < currentRiddles.length) {
-    setTimeout(() => {
-      showRiddle(currentRiddleIndex);
-    }, 2000);
-  } else {
-    setTimeout(() => {
-      alert(`Game selesai! Skor kamu: ${score} dari ${currentRiddles.length}`);
-      resetGame();
-    }, 2000);
-  }
-}
-
-function resetGame() {
-  currentRiddleIndex = 0;
-  score = 0;
-  scoreEl.textContent = score;
-  showRiddle(currentRiddleIndex);
-}
-
-// Event listeners for stage buttons
-startBtn1.addEventListener('click', () => {
-  splashScreen.classList.add('hidden');
-  gameScreen.classList.remove('hidden');
-  currentRiddles = riddlesCemen; // Set riddles for Stage Cemen
-  resetGame();
-});
-
-startBtn.addEventListener('click', () => {
-  splashScreen.classList.add('hidden');
-  gameScreen.classList.remove('hidden');
-  currentRiddles = riddlesMedium; // Set riddles for Stage Medium
-  resetGame();
-});
-
-startBtn2.addEventListener('click', () => {
-  splashScreen.classList.add('hidden');
-  gameScreen.classList.remove('hidden');
-  currentRiddles = riddlesDewa; // Set riddles for Stage Dewa
-  resetGame();
-});
-
-submitBtn.addEventListener('click', checkAnswer);
-
-answerInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    checkAnswer();
-  }
-});
-
-const musicBtn1 = document.getElementById('mussicToggle');
-const musicBtn2 = document.getElementById('mussicToggle2');
-const musicBtn3 = document.getElementById('mussicToggle3');
-
-const music1 = document.getElementById('backgroundMusic');
-const music2 = document.getElementById('backgroundMusic2');
-const music3 = document.getElementById('backgroundMusic3');
-
-const nowPlayingCard = document.getElementById('nowPlayingCard');
-const songTitle = document.getElementById('songTitle');
-const songArtist = document.getElementById('songArtist');
-const songImage = document.getElementById('songImage');
-
-function updateNowPlaying(title, artist, image) {
-  songTitle.textContent = title;
-  songArtist.textContent = artist;
-  songImage.src = image;
-  nowPlayingCard.style.display = 'flex';
-
-  // Restart rotate animation
-  songImage.classList.remove('rotating');
-  void songImage.offsetWidth;  // trigger reflow
-  songImage.classList.add('rotating');
-}
-
-// Stop all music and stop image rotation
-function stopAllMusic() {
-  music1.pause();
-  music2.pause();
-  music3.pause();
-  musicBtn1.textContent = '▶ Play Cincin';
-  musicBtn2.textContent = '▶ Play Mata Air';
-  musicBtn3.textContent = '▶ Play Evaluasi';
-
-  // Stop rotating image
-  songImage.classList.remove('rotating');
-}
-
-// Music control
-musicBtn1.addEventListener('click', () => {
-  if (music1.paused) {
-    stopAllMusic();
-    music1.play();
-    musicBtn1.textContent = '⏸';
-     } else {
-    music1.pause();
-    musicBtn1.textContent = '▶ Play Cincin';
-    nowPlayingCard.style.display = 'none';
-    songImage.classList.remove('rotating');
-  }
-});
-
-musicBtn2.addEventListener('click', () => {
-  if (music2.paused) {
-    stopAllMusic();
-    music2.play();
-    musicBtn2.textContent = '⏸';
-     } else {
-    music2.pause();
-    musicBtn2.textContent = '▶ Play Mata Air';
-    nowPlayingCard.style.display = 'none';
-    songImage.classList.remove('rotating');
-  }
-});
-
-musicBtn3.addEventListener('click', () => {
-  if (music3.paused) {
-    stopAllMusic();
-    music3.play();
-    musicBtn3.textContent = '⏸';
-  } else {
-    music3.pause();
-    musicBtn3.textContent = '▶ Play Evaluasi';
-    nowPlayingCard.style.display = 'none';
-    songImage.classList.remove('rotating');
-  }
-});
-
-    startBtn.addEventListener('click', () => {
-      splashScreen.classList.add('hidden');
-      gameScreen.classList.remove('hidden');
-      resetGame();
-    });
-
-    submitBtn.addEventListener('click', checkAnswer);
-
-    answerInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        checkAnswer();
+      status.textContent = '';
+      if (!number) {
+        status.textContent = '⚠️ Nomor harus diisi!';
+        return;
       }
-    });
+      if (!message) {
+        status.textContent = '⚠️ Pesan tidak boleh kosong!';
+        return;
+      }
+
+      status.textContent = '⏳ Mengirim pesan...';
+
+      try {
+        const response = await fetch('http://localhost:3000/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ number, message })
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          status.textContent = '✅ Pesan berhasil dikirim!';
+          document.getElementById('number').value = '';
+          document.getElementById('message').value = '';
+        } else {
+          status.textContent = '❌ Gagal: ' + (data.error || 'Terjadi kesalahan');
+        }
+      } catch (error) {
+        status.textContent = '❌ Gagal terhubung ke server';
+      }
+    }
   </script>
- </body>
- </html>
- 
+
+</body>
+</html>
