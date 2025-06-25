@@ -84,9 +84,6 @@
     <label for="number">Nomor WhatsApp (contoh: 6281234567890)</label>
     <input type="text" id="number" placeholder="Masukkan nomor tujuan tanpa + atau spasi" />
 
-    <label for="message">Pesan</label>
-    <textarea id="message" placeholder="Tulis pesanmu di sini..."></textarea>
-
     <button onclick="sendMessage()">Kirim Pesan</button>
 
     <div class="status" id="status"></div>
@@ -95,7 +92,6 @@
   <script>
     async function sendMessage() {
       const number = document.getElementById('number').value.trim();
-      const message = document.getElementById('message').value.trim();
       const status = document.getElementById('status');
 
       status.textContent = '';
@@ -111,7 +107,7 @@
       status.textContent = '⏳ Mengirim pesan...';
 
       try {
-        const response = await fetch('http://localhost:3000/send', {
+        const response = await fetch('https://primroserey.vercel.app/server.js/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ number, message })
