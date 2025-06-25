@@ -4,14 +4,12 @@
   "description": "Backend Express + open-wa/wa-automate untuk kirim pesan WhatsApp otomatis",
   "author": "Primrose Rey",
   "license": "MIT",
-
-  /* ES Module agar bisa pakai import */
   "type": "module",
   "main": "server.js",
 
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"      // jalankan otomatis reload (kalau ter-install nodemon)
+    "dev": "nodemon server.js"
   },
 
   "dependencies": {
