@@ -3,122 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kirim Pesan WhatsApp</title>
+  <title>primrose bugs app</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="https://raw.githubusercontent.com/pterodactyl/panel/develop/resources/scripts/components/logo.svg">
   <style>
-    /* styling sama seperti sebelumnya */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f172a;
-      color: #f1f5f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 1rem;
+    .glow::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      margin:auto;
+      width:260px; height:260px;
+      background:radial-gradient(circle at center, #6366f1 0%, transparent 70%);
+      filter:blur(60px);
+      z-index:-1;
+      opacity:.55;
     }
-    .container {
-      background: #1e293b;
-      padding: 2rem;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+    input, button, label {
+      transition: all 0.3s ease-in-out;
     }
-    h1 {
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      text-align: center;
-      color: #38bdf8;
-      text-shadow: 0 0 6px #0284c7;
+
+    input:focus {
+      transform: scale(1.02);
+      outline: none;
+      box-shadow: 0 0 0 3px rgb(99 102 241 / 0.5);
     }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #94a3b8;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      font-family: inherit;
-    }
+
     button {
-      width: 100%;
-      background: #0284c7;
-      border: none;
-      padding: 0.75rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.25s ease-in-out;
-      box-shadow: 0 0 10px #0284c7;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
+
     button:hover {
-      background: #0369a1;
-      box-shadow: 0 0 15px #0369a1;
+      transform: scale(1.02);
     }
-    .status {
-      margin-top: 1rem;
-      font-weight: 600;
-      text-align: center;
-      min-height: 1.2rem;
-      user-select: none;
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* File input style */
+    input[type="file"]::file-selector-button {
+      font-weight: 500;
+      border: none;
+      background: #4f46e5;
+      color: white;
+      padding: 0.5rem 1.25rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background-color: #4338ca;
+    }
+
+    /* Status text animation */
+    #status {
+      transition: color 0.3s ease, opacity 0.3s ease;
+      min-height: 1.25rem; /* agar tidak melompat saat update */
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-500">
+  <!-- Kartu + glow wrapper -->
+  <div class="relative glow">
+    <!-- CARD -->
+    <div class="w-[22rem] sm:w-[26rem] p-8 bg-white/90 dark:bg-gray-800/80 backdrop-blur rounded-lg shadow-2xl">
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <img id="preview" src="https://via.placeholder.com/150x150.png?text=Preview"
+             class="w-32 h-32 mx-auto rounded-md object-cover border border-gray-300 dark:border-gray-600" alt="Preview thumbnail" />
+        <h2 class="mt-4 text-2xl font-semibold">Яey4UK Bugs App</h2>
+      </div>
 
-  <div class="container">
-    <h1>Kirim Pesan WhatsApp</h1>
+      <!-- Form -->
+      <form id="bugForm" class="space-y-4" onsubmit="return false;">
+        <!-- Phone -->
+        <input id="phone" type="text" placeholder="Masukkan nomor WA (628xxxx)"
+          class="w-full px-4 py-2 rounded-md border bg-gray-100 dark:bg-gray-700
+                 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2
+                 focus:ring-indigo-500" />
 
-    <label for="number">Nomor WhatsApp (contoh: 6281234567890)</label>
-    <input type="text" id="number" placeholder="Masukkan nomor tujuan tanpa + atau spasi" />
+        <!-- PNG picker -->
+        <label class="block text-sm font-medium">Pilih PNG thumbnail</label>
+        <input id="pngInput" type="file" accept="image/png"
+          class="w-full rounded-md border border-gray-300 dark:border-gray-600
+                 file:bg-indigo-600 file:hover:bg-indigo-700 file:text-white file:rounded-md
+                 file:px-3 file:py-2" />
 
-    <button onclick="sendMessage()">Kirim Pesan</button>
+        <!-- Send button -->
+        <button id="sendBtn"
+          class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors">
+          Delay Only
+        </button>
 
-    <div class="status" id="status"></div>
+        <!-- Platform Buttons -->
+        <div class="flex justify-between gap-3">
+          <button type="button"
+            class="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-all">
+          Crash Android
+          </button>
+          <button type="button"
+            class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-all">
+            Crash iOS
+          </button>
+        </div>
+
+        <p id="status" class="text-center text-sm h-5"></p>
+      </form>
+    </div>
   </div>
 
   <script>
-    async function sendMessage() {
-      const number = document.getElementById('number').value.trim();
-      const status = document.getElementById('status');
+    // Dark-mode otomatis
+    if (matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.add('dark')
 
-      status.textContent = '';
+    const preview = document.getElementById('preview')
+    const pngInput = document.getElementById('pngInput')
+    const statusEl = document.getElementById('status')
 
-      if (!number) {
-        status.textContent = '⚠️ Nomor harus diisi!';
-        return;
+    pngInput.addEventListener('change', () => {
+      const file = pngInput.files[0]
+      if (!file) {
+        preview.src = 'https://via.placeholder.com/150x150.png?text=Preview'
+        return
       }
+      const reader = new FileReader()
+      reader.onload = e => { preview.src = e.target.result }
+      reader.readAsDataURL(file)
+    })
 
-      status.textContent = '⏳ Mengirim pesan...';
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+      const phone = document.getElementById('phone').value.trim()
+      const file  = pngInput.files[0]
+      if (!phone){ statusEl.textContent='❌ Nomor belum diisi'; return }
+      if (!file)  { statusEl.textContent='❌ Pilih PNG dulu'; return }
 
-      try {
-        const response = await fetch('https://github.com/primroserey/gatau/blob/main/server/send', {  // sesuaikan dengan URL backend-mu
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ number })
-        });
-        const data = await response.json();
+      statusEl.textContent='⏳ Mengirim…'
 
-        if (data.success) {
-          status.textContent = '✅ Pesan berhasil dikirim!';
-          document.getElementById('number').value = '';
-        } else {
-          status.textContent = '❌ Gagal: ' + (data.error || 'Terjadi kesalahan');
-        }
-      } catch (error) {
-        status.textContent = '❌ Gagal terhubung ke server';
+      try{
+        const base64 = await new Promise((res,rej)=>{
+          const r=new FileReader()
+          r.onload=e=>res(e.target.result.split(',')[1])
+          r.onerror=rej
+          r.readAsDataURL(file)
+        })
+        const resp=await fetch('https://test-function.duckdns.org//fcinvis',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ phone, thumbnailData: base64 })
+        })
+        const data=await resp.json()
+        statusEl.textContent = data.ok ? '✅ Berhasil dikirim!' :
+          '⚠️ Gagal: '+(data.error||'Unknown')
+      }catch(err){
+        console.error(err)
+        statusEl.textContent='🚫 Tidak dapat terhubung ke server.'
       }
-    }
+    })
   </script>
-
 </body>
 </html>
