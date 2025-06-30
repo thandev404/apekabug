@@ -1,5 +1,6 @@
-{
+[
+  {
     "username": "reyy",
-    "password": "qwerty",
-    "expired": "20-03-2026"
-}
+    "password": "qwerty"
+  }
+]
